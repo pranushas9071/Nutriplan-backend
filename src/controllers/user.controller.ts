@@ -18,8 +18,7 @@ class UserController {
           req.body.email,
           req.body.password
         );
-        console.log(data);
-        res.send(`Successfully registered!!`);
+        res.send(data);
       } catch (err) {
         res.send(`Error : user already exists!!`);
       }
@@ -81,22 +80,21 @@ class UserController {
 
   async updateUserDetails(req: Request, res: Response) {
     if (typeof req.query.username == "string") {
-    const data = await userGoalService.metabolicIndex(
-      req.query.username,
-      req.body.gender,
-      req.body.age,
-      req.body.height,
-      req.body.weight,
-      req.body.activityState
-    );
-    res.send("Successfully updated");
+      const data = await userGoalService.metabolicIndex(
+        req.query.username,
+        req.body.gender,
+        req.body.age,
+        req.body.height,
+        req.body.weight,
+        req.body.activityState
+      );
+      res.send("Successfully updated");
     }
   }
 
   async getUserDetails(req: Request, res: Response) {
     if (typeof req.query.username == "string") {
       const data = await userService.checkUser(req.query.username);
-      console.log(data);
       res.send(data);
     }
   }
@@ -116,18 +114,19 @@ class UserController {
 
   async updateGoal(req: Request, res: Response) {
     if (
-      typeof req.body.username == "string" &&
+      typeof req.query.username == "string" &&
       typeof req.body.goalPerWeek == "number"
     ) {
-      const weightData = await userService.getUserGoal(req.body.username);
+      const weightData = await userService.getUserGoal(req.query.username);
       const data = await userGoalService.dailyCalorieCalculator(
-        req.body.username,
+        req.query.username,
         req.body.goalPerWeek,
         weightData[0].status,
         weightData[0].currentCalorie
       );
-      console.log(`data after update : ${data}`);
       res.send("Successfully updated goal");
+    } else {
+      res.send("Invalid input");
     }
   }
 

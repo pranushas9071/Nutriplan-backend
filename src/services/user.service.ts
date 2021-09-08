@@ -1,17 +1,21 @@
 import { CallbackError } from "mongoose";
 import { UserDetails } from "../models";
-// import { dailyDataService } from "./index";
+import { jwtService } from "./jwt.service";
+import bcrypt from "bcrypt";
 
 class UserService {
   async addUser(username: string, email: string, password: string) {
+    const salt = 10;
+    const encodedPassword = bcrypt.hashSync(password, salt);
     const data = {
       username: username,
       email: email,
-      password: password,
+      password: encodedPassword,
       role: "user",
     };
-    // const userDailyDetail = await dailyDataService.addUser(username);
-    return UserDetails.insertMany([data]);
+    await UserDetails.insertMany([data]);
+    const result = jwtService.createToken(username);
+    return result;
   }
 
   checkUser(username: string) {
@@ -84,7 +88,6 @@ class UserService {
         if (err) {
           rej(err);
         } else {
-          console.log("count : ", result);
           res(result);
         }
       });
@@ -97,7 +100,6 @@ class UserService {
         if (err) {
           rej(err);
         } else {
-          console.log("count : ", result);
           res(result);
         }
       });
@@ -111,9 +113,7 @@ class UserService {
       filter,
       { $set: updateData },
       { new: true },
-      (err, res) => {
-        // console.log(`Goal Updation : ${res}`);
-      }
+      (err, res) => {}
     );
   }
 
@@ -149,18 +149,11 @@ class UserService {
       filter,
       { $set: update },
       { new: true },
-      (err, res) => {
-        console.log(res);
-      }
+      (err, res) => {}
     );
-    // return `Successfully updated the user details`;
   }
 
   updateUserRole(username: string, role: string) {
-    console.log("username : ",username);
-    
-    console.log("role : ",role);
-    
     return UserDetails.updateOne(
       { username: username },
       { $set: { role: role } }

@@ -2,14 +2,16 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express, { json, Request, Response } from "express";
 import mongoose from "mongoose";
+import { jwtController } from "./controllers";
 import { dailyDataRouter, foodRouter, userRouter } from "./routes";
-
 
 dotenv.config();
 
 const app = express();
 app.use(json());
 app.use(cors());
+
+app.use(jwtController.verifyToken);
 
 app.use("/user", userRouter);
 app.use("/food", foodRouter);
@@ -20,13 +22,13 @@ app.use("*", (req: Request, res: Response) => {
   res.send("Page not found!!!");
 });
 
-let url = "";
+let URL = "";
 if (!!process.env.CONNECTION && !!process.env.DATABASE)
-  url = process.env.CONNECTION + process.env.DATABASE;
+  URL = process.env.CONNECTION + process.env.DATABASE;
 const PORT = process.env.PORT;
 
 mongoose
-  .connect(url, {
+  .connect(URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,

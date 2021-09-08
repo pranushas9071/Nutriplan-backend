@@ -34,7 +34,6 @@ class DailyDataController {
         req.body.type,
         req.body.unit
       );
-      console.log(data);
       res.send(`Successfully updated ${req.body.type}`);
     } else {
       res.send("Invalid input");
@@ -104,6 +103,21 @@ class DailyDataController {
         req.query.type
       );
       res.send(data);
+    }
+  }
+
+  async getDailyData(req: Request, res: Response) {
+    if (
+      typeof req.query.username == "string" &&
+      typeof req.query.date == "string"
+    ) {
+      const data = await dailyDataService.getDailyData(
+        req.query.username,
+        req.query.date
+      );
+      res.status(200).send(data);
+    } else {
+      res.send({ error: "Invalid input" });
     }
   }
 }

@@ -9,3 +9,4 @@ dailyDataRouter.get("/getFood", dailyDataController.getFood);
 dailyDataRouter.get("/currentIntake", dailyDataController.getCurrentIntake);
 dailyDataRouter.get("/getIntakeFood", dailyDataController.getIntakeFood);
 dailyDataRouter.put("/removeIntake", dailyDataController.removeIntake);
+dailyDataRouter.get("/dailyData", dailyDataController.getDailyData);

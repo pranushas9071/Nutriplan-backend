@@ -4,12 +4,9 @@ import { foodService } from "./food.service";
 
 class DailyDataService {
   async createFoodPlan(username: string, type: string) {
-    console.log(username + " " + type);
-
     const date = Date.now();
     const today = new Date(date).toUTCString().split(" ");
     const finalDate = today[1] + " " + today[2] + " " + today[3];
-    // const type = "breakfast";
     const checkDocs = await this.checkUserExists(username, finalDate, type);
     if (typeof checkDocs == "number" && checkDocs > 0) return "Created Already";
     else {
@@ -21,8 +18,6 @@ class DailyDataService {
 
       const calorie = foodPlanService.getCalorie();
 
-      console.log("allotted : ",calorie);
-      
       const data = {
         username: username,
         date: finalDate,
@@ -34,7 +29,6 @@ class DailyDataService {
 
       await dailyDetails.insertMany([data]);
       return "Successfully created user food plan";
-      // return foodData;
     }
   }
 
@@ -46,7 +40,6 @@ class DailyDataService {
           if (err) {
             rej(err);
           } else {
-            console.log("count : ", result);
             res(result);
           }
         }
@@ -65,8 +58,6 @@ class DailyDataService {
     const currentCalorie = await this.getCurrenIntake(username, date, type);
     const foodCalorie = await foodService.getFood(food);
     const intake = { itemName: food, quantity: quantity, unit: unit };
-    console.log("add food cal : " + foodCalorie);
-    console.log("add current " + currentCalorie[0].calorieIntake);
     const calorie =
       currentCalorie[0].calorieIntake +
       (foodCalorie.calorie / foodCalorie.quantity) * quantity;
@@ -114,8 +105,6 @@ class DailyDataService {
   ) {
     const currentCalorie = await this.getCurrenIntake(username, date, type);
     const foodCalorie = await foodService.getFood(itemName);
-    console.log("rem food cal : " + foodCalorie);
-    console.log("rem cur cal" + currentCalorie[0].calorieIntake);
     const calorie =
       currentCalorie[0].calorieIntake -
       (foodCalorie.calorie / foodCalorie.quantity) * quantity;
@@ -157,6 +146,13 @@ class DailyDataService {
     return dailyDetails.find(
       { username: username, date: date, type: type },
       { balance: 1, _id: 0 }
+    );
+  }
+
+  getDailyData(username: string, date: string) {
+    return dailyDetails.find(
+      { username: username, date: date },
+      { allottedCalorie: 1, calorieIntake: 1, _id: 0, type: 1 }
     );
   }
 }

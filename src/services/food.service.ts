@@ -99,7 +99,6 @@ class FoodService {
       { $set: updateData },
       { new: true },
       (err, res) => {
-        console.log(`Food Updation : ${res}`);
       }
     );
   }

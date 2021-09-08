@@ -11,5 +11,4 @@ foodRouter.put("/updateFood", foodController.updateFood);
 foodRouter.delete("/deleteFood", foodController.deleteFood);
 foodRouter.get("/searchFood", foodController.searchFood);
 
-// foodRouter.get("/test", foodPlanController.testBreakFast);
 foodRouter.get("/userDailyCalorie", foodPlanController.getUserDailyCalorie);

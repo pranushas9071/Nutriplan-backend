@@ -20,7 +20,6 @@ class FoodController {
         req.body.combo,
         req.body.kind
       );
-      console.log(data);
       res.send("Successfully added");
     }
   }
@@ -69,7 +68,6 @@ class FoodController {
         req.body.combo,
         req.body.kind
       );
-      console.log(data);
       res.send("Updated successfully");
     } else {
       res.send("invalid inputs");
