@@ -7,11 +7,15 @@ class DailyDataController {
       typeof req.body.username == "string" &&
       typeof req.body.type == "string"
     ) {
-      const data = await dailyDataService.createFoodPlan(
-        req.body.username,
-        req.body.type
-      );
-      res.send(data);
+      try {
+        const data = await dailyDataService.createFoodPlan(
+          req.body.username,
+          req.body.type
+        );
+        res.send(data);
+      } catch (err) {
+        res.status(500).send(err);
+      }
     } else {
       res.send("Invalid data");
     }
@@ -26,15 +30,19 @@ class DailyDataController {
       typeof req.body.type == "string" &&
       typeof req.body.unit == "string"
     ) {
-      const data = await dailyDataService.updateIntake(
-        req.query.username,
-        req.body.date,
-        req.body.food,
-        req.body.quantity,
-        req.body.type,
-        req.body.unit
-      );
-      res.send(`Successfully updated ${req.body.type}`);
+      try {
+        const data = await dailyDataService.updateIntake(
+          req.query.username,
+          req.body.date,
+          req.body.food,
+          req.body.quantity,
+          req.body.type,
+          req.body.unit
+        );
+        res.send(`Successfully updated ${req.body.type}`);
+      } catch (err) {
+        res.status(500).send(err);
+      }
     } else {
       res.send("Invalid input");
     }
@@ -48,14 +56,18 @@ class DailyDataController {
       typeof req.body.itemName == "string" &&
       typeof req.body.quantity == "number"
     ) {
-      const data = await dailyDataService.removeIntake(
-        req.query.username,
-        req.body.type,
-        req.body.date,
-        req.body.itemName,
-        req.body.quantity
-      );
-      res.send("successfully removed");
+      try {
+        const data = await dailyDataService.removeIntake(
+          req.query.username,
+          req.body.type,
+          req.body.date,
+          req.body.itemName,
+          req.body.quantity
+        );
+        res.send("successfully removed");
+      } catch (err) {
+        res.status(500).send(err);
+      }
     } else {
       res.send("Invalid input");
     }
@@ -67,12 +79,16 @@ class DailyDataController {
       typeof req.query.type == "string" &&
       typeof req.query.date == "string"
     ) {
-      const data = await dailyDataService.getIntakeFood(
-        req.query.username,
-        req.query.type,
-        req.query.date
-      );
-      res.send(data);
+      try {
+        const data = await dailyDataService.getIntakeFood(
+          req.query.username,
+          req.query.type,
+          req.query.date
+        );
+        res.send(data);
+      } catch (err) {
+        res.status(500).send(err);
+      }
     }
   }
 
@@ -82,12 +98,16 @@ class DailyDataController {
       typeof req.query.date == "string" &&
       typeof req.query.type == "string"
     ) {
-      const data = await dailyDataService.getFood(
-        req.query.username,
-        req.query.date,
-        req.query.type
-      );
-      res.send(data[0]);
+      try {
+        const data = await dailyDataService.getFood(
+          req.query.username,
+          req.query.date,
+          req.query.type
+        );
+        res.send(data[0]);
+      } catch (err) {
+        res.status(500).send(err);
+      }
     }
   }
 
@@ -97,12 +117,16 @@ class DailyDataController {
       typeof req.query.date == "string" &&
       typeof req.query.type == "string"
     ) {
-      const data = await dailyDataService.getCurrenIntake(
-        req.query.username,
-        req.query.date,
-        req.query.type
-      );
-      res.send(data);
+      try {
+        const data = await dailyDataService.getCurrenIntake(
+          req.query.username,
+          req.query.date,
+          req.query.type
+        );
+        res.send(data);
+      } catch (err) {
+        res.status(500).send(err);
+      }
     }
   }
 
@@ -111,11 +135,15 @@ class DailyDataController {
       typeof req.query.username == "string" &&
       typeof req.query.date == "string"
     ) {
-      const data = await dailyDataService.getDailyData(
-        req.query.username,
-        req.query.date
-      );
-      res.status(200).send(data);
+      try {
+        const data = await dailyDataService.getDailyData(
+          req.query.username,
+          req.query.date
+        );
+        res.status(200).send(data);
+      } catch (err) {
+        res.status(500).send(err);
+      }
     } else {
       res.send({ error: "Invalid input" });
     }

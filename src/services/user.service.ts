@@ -13,96 +13,110 @@ class UserService {
       password: encodedPassword,
       role: "user",
     };
-    await UserDetails.insertMany([data]);
-    const result = jwtService.createToken(username);
-    return result;
+    try {
+      await UserDetails.insertMany([data]);
+      const result = jwtService.createToken(username);
+      return result;
+    } catch (err) {
+      throw "User already exists.";
+    }
   }
 
   checkUser(username: string) {
-    return UserDetails.findOne({ username: username });
+    return UserDetails.findOne({ username: username }, (err: CallbackError) => {
+      if (err) throw "Error in finding user.";
+    });
   }
 
   getAllUser() {
-    return UserDetails.find({});
+    return UserDetails.find({}, (err) => {
+      if (err) throw "Unable to fetch user data.";
+    });
   }
 
   searchUser(user: string) {
     var regex = new RegExp(user, "i");
-    return UserDetails.find({ username: regex });
+    return UserDetails.find({ username: regex }, (err) => {
+      if (err) throw "Error occurred while searching.";
+    });
   }
 
   deleteUser(username: string) {
     return UserDetails.deleteOne(
       { username: username },
       (err: CallbackError) => {
-        console.log(err);
+        if (err) throw "Unable to delete user.";
       }
     );
   }
 
   getAptWeight(username: string) {
-    return UserDetails.aggregate([
-      { $match: { username: username } },
-      { $project: { aptWeight: 1, _id: 0, BMI: 1, weight: 1, status: 1 } },
-    ]);
+    return UserDetails.find(
+      { username: username },
+      { aptWeight: 1, _id: 0, BMI: 1, weight: 1, status: 1 },
+      {},
+      (err) => {
+        if (err) throw "Error in getting user aptWeight.";
+      }
+    );
   }
 
   getRole(username: string) {
-    return UserDetails.aggregate([
-      { $match: { username: username } },
-      { $project: { role: 1, _id: 0 } },
-    ]);
+    return UserDetails.find(
+      { username: username },
+      { role: 1, _id: 0 },
+      {},
+      (err) => {
+        if (err) throw "Error in getting user role";
+      }
+    );
   }
 
   getUserGoal(username: string) {
-    return UserDetails.aggregate([
-      { $match: { username: username } },
+    return UserDetails.find(
+      { username: username },
       {
-        $project: {
-          aptWeight: 1,
-          _id: 0,
-          weight: 1,
-          status: 1,
-          goalPerWeek: 1,
-          currentCalorie: 1,
-        },
+        aptWeight: 1,
+        _id: 0,
+        weight: 1,
+        status: 1,
+        goalPerWeek: 1,
+        currentCalorie: 1,
       },
-    ]);
+      {},
+      (err) => {
+        if (err) throw "Error in getting user goal.";
+      }
+    );
   }
 
   getDailyCalorie(username: string) {
-    return UserDetails.aggregate([
-      { $match: { username: username } },
+    return UserDetails.find(
+      { username: username },
       {
-        $project: {
-          _id: 0,
-          dailyCalorie: 1,
-        },
+        _id: 0,
+        dailyCalorie: 1,
       },
-    ]);
+      {},
+      (err) => {
+        if (err) throw "Cannot find calorie details.";
+      }
+    );
   }
 
   searchEmail(email: string) {
-    return new Promise((res, rej) => {
-      UserDetails.countDocuments({ email: email }, (err, result) => {
-        if (err) {
-          rej(err);
-        } else {
-          res(result);
-        }
-      });
+    return UserDetails.countDocuments({ email: email }, (err, result) => {
+      if (err) {
+        throw "Searching failed.";
+      }
     });
   }
 
   searchUsername(username: string) {
-    return new Promise((res, rej) => {
-      UserDetails.countDocuments({ username: username }, (err, result) => {
-        if (err) {
-          rej(err);
-        } else {
-          res(result);
-        }
-      });
+    return UserDetails.countDocuments({ username: username }, (err, result) => {
+      if (err) {
+        throw "Searching failed.";
+      }
     });
   }
 
@@ -113,7 +127,9 @@ class UserService {
       filter,
       { $set: updateData },
       { new: true },
-      (err, res) => {}
+      (err, res) => {
+        if (err) throw "Error in updating user goal.";
+      }
     );
   }
 
@@ -149,14 +165,20 @@ class UserService {
       filter,
       { $set: update },
       { new: true },
-      (err, res) => {}
+      (err, res) => {
+        if (err) throw "Unable to update user details.";
+      }
     );
   }
 
   updateUserRole(username: string, role: string) {
     return UserDetails.updateOne(
       { username: username },
-      { $set: { role: role } }
+      { $set: { role: role } },
+      {},
+      (err) => {
+        if (err) throw "Error in updating user role.";
+      }
     );
   }
 }

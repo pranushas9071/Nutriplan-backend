@@ -65,36 +65,40 @@ class UserGoalService {
     status: string,
     currentCalorie: number
   ) {
-    let dailyCalorie;
-    if (status == "overweight") {
-      if (goalPerWeek == 0.25) {
-        dailyCalorie = currentCalorie - 275;
-      } else if (goalPerWeek == 0.5) {
-        dailyCalorie = currentCalorie - 550;
-      } else if (goalPerWeek == 0.75) {
-        dailyCalorie = currentCalorie - 825;
+    try {
+      let dailyCalorie;
+      if (status == "overweight") {
+        if (goalPerWeek == 0.25) {
+          dailyCalorie = currentCalorie - 275;
+        } else if (goalPerWeek == 0.5) {
+          dailyCalorie = currentCalorie - 550;
+        } else if (goalPerWeek == 0.75) {
+          dailyCalorie = currentCalorie - 825;
+        } else {
+          dailyCalorie = currentCalorie - 1100;
+        }
+      } else if (status == "underweight") {
+        if (goalPerWeek == 0.25) {
+          dailyCalorie = currentCalorie + 275;
+        } else if (goalPerWeek == 0.5) {
+          dailyCalorie = currentCalorie + 550;
+        } else if (goalPerWeek == 0.75) {
+          dailyCalorie = currentCalorie + 825;
+        } else {
+          dailyCalorie = currentCalorie + 1100;
+        }
       } else {
-        dailyCalorie = currentCalorie - 1100;
+        dailyCalorie = currentCalorie;
       }
-    } else if (status == "underweight") {
-      if (goalPerWeek == 0.25) {
-        dailyCalorie = currentCalorie + 275;
-      } else if (goalPerWeek == 0.5) {
-        dailyCalorie = currentCalorie + 550;
-      } else if (goalPerWeek == 0.75) {
-        dailyCalorie = currentCalorie + 825;
-      } else {
-        dailyCalorie = currentCalorie + 1100;
-      }
-    } else {
-      dailyCalorie = currentCalorie;
+      const data = await userService.updateGoal(
+        username,
+        goalPerWeek,
+        dailyCalorie
+      );
+      return data;
+    } catch (err) {
+      throw "Error in calculating daily calorie.";
     }
-    const data = await userService.updateGoal(
-      username,
-      goalPerWeek,
-      dailyCalorie
-    );
-    return data;
   }
 }
 
