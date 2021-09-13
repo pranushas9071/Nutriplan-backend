@@ -13,11 +13,21 @@ class DailyDataService {
       if (typeof checkDocs == "number" && checkDocs > 0)
         return "Created Already";
       else {
+        let balance = 0;
         const foodData = await foodPlanService.dailyCalorieCalculator(
           username,
           type,
           finalDate
         );
+        if (foodData.length == 4 && !!foodData[3].balance) {
+          balance = foodData[3].balance;
+          foodData.pop();
+        } else {
+          if (!!foodData[1].balance) {
+            balance = foodData[1].balance;
+            foodData.pop();
+          }
+        }
         const calorie = foodPlanService.getCalorie();
         const data = {
           username: username,
@@ -29,6 +39,14 @@ class DailyDataService {
         };
 
         const result = await dailyDetails.insertMany([data]);
+
+        const setBalance = await dailyDataService.setBalance(
+          balance,
+          type,
+          username,
+          finalDate
+        );
+
         return "Successfully created user food plan";
       }
     } catch (err) {
@@ -174,6 +192,13 @@ class DailyDataService {
       (err) => {
         if (err) throw "Error in getting balance calorie.";
       }
+    );
+  }
+
+  setBalance(calorie: number, type: string, username: string, date: string) {
+    return dailyDetails.updateOne(
+      { type: type, username: username, date: date },
+      { balance: calorie }
     );
   }
 

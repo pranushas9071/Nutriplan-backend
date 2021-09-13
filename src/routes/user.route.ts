@@ -1,6 +1,5 @@
 import express from "express";
-
-import { jwtController, userController } from "../controllers";
+import { userController } from "../controllers";
 
 export const userRouter = express.Router();
 
@@ -17,4 +16,3 @@ userRouter.get("/getAllUser", userController.getAllUser);
 userRouter.get("/findUser", userController.searchUser);
 userRouter.delete("/deleteUser", userController.deleteUser);
 userRouter.put("/updateRole", userController.updateUserRole);
-userRouter.get("/test", jwtController.verifyToken);

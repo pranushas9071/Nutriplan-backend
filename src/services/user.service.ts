@@ -31,7 +31,7 @@ class UserService {
   getAllUser() {
     return UserDetails.find({}, (err) => {
       if (err) throw "Unable to fetch user data.";
-    });
+    }).sort({ username: 1 });
   }
 
   searchUser(user: string) {

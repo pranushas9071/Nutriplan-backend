@@ -11,7 +11,7 @@ const app = express();
 app.use(json());
 app.use(cors());
 
-app.use(jwtController.verifyToken);
+// app.use(jwtController.verifyToken);
 
 app.use("/user", userRouter);
 app.use("/food", foodRouter);

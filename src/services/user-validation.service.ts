@@ -13,7 +13,12 @@ class UserValidationService {
         const comparisonResult = bcrypt.compareSync(password, data.password);
         if (comparisonResult) {
           const result = jwtService.createToken(username);
-          res(result);
+          const obj = {
+            result: result,
+            hasDetail: !!data.BMI,
+            hasGoal: !!data.dailyCalorie,
+          };
+          res(obj);
         } else rej("Incorrect password");
       }
     });

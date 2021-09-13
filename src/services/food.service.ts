@@ -32,7 +32,7 @@ class FoodService {
   getAllFood() {
     return FoodDetails.find({}, (err: CallbackError) => {
       if (err) throw "Unable to get food list.";
-    });
+    }).sort({ itemName: 1 });
   }
 
   getAllComboFood() {
@@ -84,6 +84,15 @@ class FoodService {
       },
       (err) => {
         if (err) throw "Error in getting part food.";
+      }
+    );
+  }
+
+  getSuperFood(calorie: number) {
+    return FoodDetails.find(
+      { kind: "super", calorie: { $lte: calorie } },
+      (err) => {
+        if (err) throw "Unable to find super food";
       }
     );
   }
