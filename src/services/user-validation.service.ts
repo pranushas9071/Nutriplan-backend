@@ -8,7 +8,7 @@ class UserValidationService {
 
     return new Promise((res, rej) => {
       if (data == null) {
-        rej("No user found");
+        rej({ result: "No user found" });
       } else {
         const comparisonResult = bcrypt.compareSync(password, data.password);
         if (comparisonResult) {
@@ -19,7 +19,7 @@ class UserValidationService {
             hasGoal: !!data.dailyCalorie,
           };
           res(obj);
-        } else rej("Incorrect password");
+        } else rej({ result: "Incorrect password" });
       }
     });
   }
