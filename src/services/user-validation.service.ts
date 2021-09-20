@@ -12,7 +12,7 @@ class UserValidationService {
       } else {
         const comparisonResult = bcrypt.compareSync(password, data.password);
         if (comparisonResult) {
-          const result = jwtService.createToken(username);
+          const result = jwtService.createToken(username, data.role);
           const obj = {
             result: result,
             hasDetail: !!data.BMI,

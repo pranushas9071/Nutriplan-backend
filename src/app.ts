@@ -2,7 +2,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express, { json, Request, Response } from "express";
 import mongoose from "mongoose";
-import { jwtController } from "./controllers";
+import unless from "express-unless";
+import { jwtAuth } from "./services/index";
+
 import { dailyDataRouter, foodRouter, userRouter } from "./routes";
 
 dotenv.config();
@@ -11,15 +13,25 @@ const app = express();
 app.use(json());
 app.use(cors());
 
-// app.use(jwtController.verifyToken);
+const auth:any=jwtAuth;
+auth.unless = unless;
+app.use(
+  auth.unless({
+    path: [
+      "/user/checkUser",
+      "/user/searchUser",
+      "/user/searchEmail",
+      "/user/addUser",
+    ],
+  })
+);
 
 app.use("/user", userRouter);
 app.use("/food", foodRouter);
-app.use("/dailyUpdate",dailyDataRouter)
+app.use("/dailyUpdate", dailyDataRouter);
 
 app.use("*", (req: Request, res: Response) => {
-  res.status(404);
-  res.send("Page not found!!!");
+  res.status(404).send("Page not found!!!");
 });
 
 let URL = "";

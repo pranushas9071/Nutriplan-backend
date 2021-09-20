@@ -82,8 +82,7 @@ class DailyDataService {
       const foodCalorie = await foodService.getFood(food);
       const intake = { itemName: food, quantity: quantity, unit: unit };
       const calorie =
-        currentCalorie[0].calorieIntake +
-        (foodCalorie.calorie / foodCalorie.quantity) * quantity;
+        currentCalorie[0].calorieIntake + foodCalorie.calorie * quantity;
 
       const result = await dailyDetails.aggregate([
         {

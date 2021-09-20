@@ -15,10 +15,10 @@ class UserService {
     };
     try {
       await UserDetails.insertMany([data]);
-      const result = jwtService.createToken(username);
+      const result = jwtService.createToken(username,"user");
       return result;
     } catch (err) {
-      throw "User already exists.";
+      throw "Error ocuured while inserting data.";
     }
   }
 

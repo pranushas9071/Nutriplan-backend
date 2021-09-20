@@ -12,12 +12,12 @@ class DailyDataController {
           req.body.username,
           req.body.type
         );
-        res.send(data);
+        res.json(data);
       } catch (err) {
         res.status(500).send(err);
       }
     } else {
-      res.send("Invalid data");
+      res.json("Invalid data");
     }
   }
 
@@ -39,7 +39,7 @@ class DailyDataController {
           req.body.type,
           req.body.unit
         );
-        res.send(`Successfully updated ${req.body.type}`);
+        res.json(`Successfully updated ${req.body.type}`);
       } catch (err) {
         res.status(500).send(err);
       }
@@ -64,12 +64,12 @@ class DailyDataController {
           req.body.itemName,
           req.body.quantity
         );
-        res.send("successfully removed");
+        res.json("successfully removed");
       } catch (err) {
         res.status(500).send(err);
       }
     } else {
-      res.send("Invalid input");
+      res.json("Invalid input");
     }
   }
 
@@ -132,12 +132,15 @@ class DailyDataController {
 
   async getDailyData(req: Request, res: Response) {
     if (
-      typeof req.query.username == "string" &&
+      // typeof req.query.username == "string" &&
       typeof req.query.date == "string"
     ) {
       try {
+        // console.log("token " + req.headers.authorization);
+        // console.log("body ", req.body.user);
+
         const data = await dailyDataService.getDailyData(
-          req.query.username,
+          req.body.user.username,
           req.query.date
         );
         res.status(200).send(data);

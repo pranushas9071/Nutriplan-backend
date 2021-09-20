@@ -18,7 +18,7 @@ class UserController {
           req.body.email,
           req.body.password
         );
-        res.send(data);
+        res.json(data);
       } catch (err) {
         res.status(500).send(err);
       }
@@ -49,7 +49,7 @@ class UserController {
     if (typeof req.query.username == "string") {
       try {
         const data = await userService.deleteUser(req.query.username);
-        res.send("Deleted Successfully");
+        res.json("Deleted Successfully");
       } catch (err) {
         res.status(500).send(err);
       }
@@ -58,13 +58,13 @@ class UserController {
 
   async checkUser(req: Request, res: Response) {
     if (
-      typeof req.query.username == "string" &&
-      typeof req.query.password == "string"
+      typeof req.body.username == "string" &&
+      typeof req.body.password == "string"
     ) {
       try {
         const data = await userValidationService.loginCheck(
-          req.query.username,
-          req.query.password
+          req.body.username,
+          req.body.password
         );
         res.send(data);
       } catch (err) {
@@ -78,8 +78,8 @@ class UserController {
       try {
         const data = await userService.searchUsername(req.body.username);
         if (typeof data == "number" && data > 0)
-          res.send("username already exists");
-        else res.send(`username doesn't exist`);
+          res.json("username already exists");
+        else res.json(`username doesn't exist`);
       } catch (err) {
         res.status(500).send(err);
       }
@@ -91,8 +91,8 @@ class UserController {
       try {
         const data = await userService.searchEmail(req.body.email);
         if (typeof data == "number" && data > 0)
-          res.send("email already exists");
-        else res.send(`email doesn't exist`);
+          res.json("email already exists");
+        else res.json(`email doesn't exist`);
       } catch (err) {
         res.status(500).send(err);
       }
@@ -110,7 +110,7 @@ class UserController {
           req.body.weight,
           req.body.activityState
         );
-        res.send("Successfully updated");
+        res.json("Successfully updated");
       } catch (err) {
         res.status(500).send(err);
       }
@@ -138,7 +138,7 @@ class UserController {
           req.query.username,
           req.body.role
         );
-        res.send("successfully updated role");
+        res.json("successfully updated role");
       } catch (err) {
         res.status(500).send(err);
       }
@@ -158,7 +158,7 @@ class UserController {
           weightData[0].status,
           weightData[0].currentCalorie
         );
-        res.send("Successfully updated goal");
+        res.json("Successfully updated goal");
       } catch (err) {
         res.status(500).send(err);
       }
