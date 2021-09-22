@@ -15,10 +15,10 @@ class UserService {
     };
     try {
       await UserDetails.insertMany([data]);
-      const result = jwtService.createToken(username,"user");
-      return result;
+      const result = jwtService.createToken(username, "user");
+      return { result: result };
     } catch (err) {
-      throw "Error ocuured while inserting data.";
+      throw "Error ocurred while inserting data.";
     }
   }
 

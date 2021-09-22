@@ -11,7 +11,7 @@ class DailyDataService {
       const checkDocs = await this.checkUserExists(username, finalDate, type);
 
       if (typeof checkDocs == "number" && checkDocs > 0)
-        return "Created Already";
+        return { message: "Created Already" };
       else {
         let balance = 0;
         const foodData = await foodPlanService.dailyCalorieCalculator(
@@ -47,7 +47,7 @@ class DailyDataService {
           finalDate
         );
 
-        return "Successfully created user food plan";
+        return { message: "Successfully created user food plan" };
       }
     } catch (err) {
       throw err;

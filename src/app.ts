@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import unless from "express-unless";
 import { jwtAuth } from "./services/index";
 
-import { dailyDataRouter, foodRouter, userRouter } from "./routes";
+import { adminRouter, dailyDataRouter, foodRouter, userRouter } from "./routes";
 
 dotenv.config();
 
@@ -29,6 +29,7 @@ app.use(
 app.use("/user", userRouter);
 app.use("/food", foodRouter);
 app.use("/dailyUpdate", dailyDataRouter);
+app.use("/admin",adminRouter)
 
 app.use("*", (req: Request, res: Response) => {
   res.status(404).send("Page not found!!!");

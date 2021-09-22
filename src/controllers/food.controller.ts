@@ -20,7 +20,7 @@ class FoodController {
         req.body.combo,
         req.body.kind
       );
-      res.json("Successfully added");
+      res.send({ message: "Successfully added" });
     }
   }
 
@@ -85,12 +85,12 @@ class FoodController {
           req.body.combo,
           req.body.kind
         );
-        res.json("Updated successfully");
+        res.send({ message: "Updated successfully" });
       } catch (err) {
         res.status(500).send(err);
       }
     } else {
-      res.json("invalid inputs");
+      res.send({ message: "invalid inputs" });
     }
   }
 
@@ -98,7 +98,7 @@ class FoodController {
     try {
       if (typeof req.query.itemName == "string") {
         const data = foodService.deleteFood(req.query.itemName);
-        res.json("Deleted successfully");
+        res.send({ message: "Deleted successfully" });
       }
     } catch (err) {
       res.status(500).send(err);

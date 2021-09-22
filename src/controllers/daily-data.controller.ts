@@ -3,27 +3,23 @@ import { dailyDataService } from "../services";
 
 class DailyDataController {
   async createFoodPlan(req: Request, res: Response) {
-    if (
-      typeof req.body.username == "string" &&
-      typeof req.body.type == "string"
-    ) {
+    if (typeof req.body.type == "string") {
       try {
         const data = await dailyDataService.createFoodPlan(
-          req.body.username,
+          req.body.user.username,
           req.body.type
         );
-        res.json(data);
+        res.send(data);
       } catch (err) {
         res.status(500).send(err);
       }
     } else {
-      res.json("Invalid data");
+      res.send({ message: "Invalid data" });
     }
   }
 
   async updateIntake(req: Request, res: Response) {
     if (
-      typeof req.query.username == "string" &&
       typeof req.body.date == "string" &&
       typeof req.body.food == "string" &&
       typeof req.body.quantity == "number" &&
@@ -32,25 +28,24 @@ class DailyDataController {
     ) {
       try {
         const data = await dailyDataService.updateIntake(
-          req.query.username,
+          req.body.user.username,
           req.body.date,
           req.body.food,
           req.body.quantity,
           req.body.type,
           req.body.unit
         );
-        res.json(`Successfully updated ${req.body.type}`);
+        res.send({ message: `Successfully updated ${req.body.type}` });
       } catch (err) {
         res.status(500).send(err);
       }
     } else {
-      res.send("Invalid input");
+      res.send({ message: "Invalid input" });
     }
   }
 
   async removeIntake(req: Request, res: Response) {
     if (
-      typeof req.query.username == "string" &&
       typeof req.body.type == "string" &&
       typeof req.body.date == "string" &&
       typeof req.body.itemName == "string" &&
@@ -58,30 +53,29 @@ class DailyDataController {
     ) {
       try {
         const data = await dailyDataService.removeIntake(
-          req.query.username,
+          req.body.user.username,
           req.body.type,
           req.body.date,
           req.body.itemName,
           req.body.quantity
         );
-        res.json("successfully removed");
+        res.send({ message: "successfully removed" });
       } catch (err) {
         res.status(500).send(err);
       }
     } else {
-      res.json("Invalid input");
+      res.send({ message: "Invalid input" });
     }
   }
 
   async getIntakeFood(req: Request, res: Response) {
     if (
-      typeof req.query.username == "string" &&
       typeof req.query.type == "string" &&
       typeof req.query.date == "string"
     ) {
       try {
         const data = await dailyDataService.getIntakeFood(
-          req.query.username,
+          req.body.user.username,
           req.query.type,
           req.query.date
         );
@@ -94,13 +88,12 @@ class DailyDataController {
 
   async getFood(req: Request, res: Response) {
     if (
-      typeof req.query.username == "string" &&
       typeof req.query.date == "string" &&
       typeof req.query.type == "string"
     ) {
       try {
         const data = await dailyDataService.getFood(
-          req.query.username,
+          req.body.user.username,
           req.query.date,
           req.query.type
         );
@@ -113,13 +106,12 @@ class DailyDataController {
 
   async getCurrentIntake(req: Request, res: Response) {
     if (
-      typeof req.query.username == "string" &&
       typeof req.query.date == "string" &&
       typeof req.query.type == "string"
     ) {
       try {
         const data = await dailyDataService.getCurrenIntake(
-          req.query.username,
+          req.body.user.username,
           req.query.date,
           req.query.type
         );
@@ -131,14 +123,8 @@ class DailyDataController {
   }
 
   async getDailyData(req: Request, res: Response) {
-    if (
-      // typeof req.query.username == "string" &&
-      typeof req.query.date == "string"
-    ) {
+    if (typeof req.query.date == "string") {
       try {
-        // console.log("token " + req.headers.authorization);
-        // console.log("body ", req.body.user);
-
         const data = await dailyDataService.getDailyData(
           req.body.user.username,
           req.query.date
