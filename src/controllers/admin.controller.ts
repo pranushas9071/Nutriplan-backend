@@ -4,7 +4,6 @@ import { userGoalService, userService } from "../services";
 class AdminController {
   async searchUser(req: Request, res: Response) {
     if (
-      req.body.user.role == "admin" &&
       typeof req.query.username == "string"
     ) {
       try {
@@ -20,7 +19,7 @@ class AdminController {
 
   async deleteUser(req: Request, res: Response) {
     if (
-      req.body.user.role == "admin" &&
+      // req.body.user.role == "admin" &&
       typeof req.query.username == "string"
     ) {
       try {
@@ -36,7 +35,7 @@ class AdminController {
 
   async updateUserRole(req: Request, res: Response) {
     if (
-      req.body.user.role == "admin" &&
+      // req.body.user.role == "admin" &&
       typeof req.body.username == "string" &&
       typeof req.body.role == "string"
     ) {
@@ -55,7 +54,9 @@ class AdminController {
   }
 
   async updateUserDetails(req: Request, res: Response) {
-    if (req.body.user.role == "admin" && typeof req.body.username == "string") {
+    if (
+      // req.body.user.role == "admin" && 
+      typeof req.body.username == "string") {
       try {
         const data = await userGoalService.metabolicIndex(
           req.body.username,
@@ -76,7 +77,7 @@ class AdminController {
 
   async updateGoal(req: Request, res: Response) {
     if (
-      req.body.user.role == "admin" &&
+      // req.body.user.role == "admin" &&
       typeof req.body.username == "string" &&
       typeof req.body.goalPerWeek == "number"
     ) {
@@ -98,21 +99,17 @@ class AdminController {
   }
 
   async getAllUser(req: Request, res: Response) {
-    if (req.body.user.role == "admin") {
       try {
         const data = await userService.getAllUser();
         res.send(data);
       } catch (err) {
         res.status(500).send(err);
       }
-    } else {
-      res.status(403).send({ message: "Not authorized" });
-    }
   }
 
   async getUserDetails(req: Request, res: Response) {
     if (
-      req.body.user.role == "admin" &&
+      // req.body.user.role == "admin" &&
       typeof req.query.username == "string"
     ) {
       try {

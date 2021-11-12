@@ -26,12 +26,16 @@ class JwtService {
 }
 export const jwtService = new JwtService();
 
-export const jwtAuth = (req: Request, res: Response, next: any) => {
+export const jwtAuth = (req: any, res: Response, next: any) => {
   if (req.headers.authorization) {
     const token = req.headers.authorization.split(" ")[1];
     const result = jwtService.verifyToken(token);
     if (result.message == "success") {
       req.body.user = result.data;
+      const temp: any = result.data;
+      req.user = {
+        permissions: temp.role,
+      };
       next();
     } else {
       res
